@@ -1,0 +1,475 @@
+import java.util.*;
+import java.io.*;
+
+
+/**
+ * RedBlackBST class
+ */
+public class RedBlackBST<Key extends Comparable<Key>, Value> {
+
+    private static final boolean RED = true;
+    private static final boolean BLACK = false;
+    Node root;     // root of the BST
+
+    /*************************************************************************
+     *  Node Class and methods - DO NOT MODIFY
+     *************************************************************************/
+    public class Node {
+        Key key;           // key
+        Value val;         // associated data
+        Node left, right;  // links to left and right subtrees
+        boolean color;     // color of parent link
+        int N;             // subtree count
+
+        public Node(Key key, Value val, boolean color, int N) {
+            this.key = key;
+            this.val = val;
+            this.color = color;
+            this.N = N;
+        }
+    }
+
+    // is node x red; false if x is null ?
+    private boolean isRed(Node x) {
+        if (x == null) return false;
+        return (x.color == RED);
+    }
+
+    // number of node in subtree rooted at x; 0 if x is null
+    private int size(Node x) {
+        if (x == null) return 0;
+        return x.N;
+    }
+
+    // return number of key-value pairs in this symbol table
+    public int size() {
+        return size(root);
+    }
+
+    // is this symbol table empty?
+    public boolean isEmpty() {
+        return root == null;
+    }
+
+    public RedBlackBST() {
+        this.root = null;
+    }
+
+    /*************************************************************************
+     *  Modification Functions
+     *************************************************************************/
+
+    // insert the key-value pair; overwrite the old value with the new value
+    // if the key is already present
+    public void insert(Key key, Value val) {
+
+        if (root == null) {
+            root = new Node(key, val, BLACK, 0);
+            root.N = root.N + 1;
+            return;
+        }
+
+        root = insert_recursively(root, key, val);
+        root.color = BLACK;
+
+    }
+
+    public Node insert_recursively(Node node, Key key, Value val) {
+        if (node.key.compareTo(key) < 0) {
+            if (node.right == null) {
+                node.right = new Node(key, val, RED, 1);
+
+
+            } else {
+                node.right = insert_recursively(node.right, key, val);
+            }
+        } else if (node.key.compareTo(key) > 0) {
+            if (node.left == null) {
+                node.left = new Node(key, val, RED, 1);
+            } else {
+                node.left = insert_recursively(node.left, key, val);
+            }
+        } else {
+            node.val = val;
+        }
+        node.N = size(node.right) + size(node.left) + 1;
+
+        return balance(node);
+
+    }
+
+
+    // delete the key-value pair with the given key
+    public void delete(Key key) {
+        if (!contains(key)) {
+            return;
+        }
+
+        if (!(isRed(root.left) || isRed(root.right))) {
+            root.color = RED;
+        }
+
+        root = delete_recursively(root, key);
+
+        if (isEmpty()) {
+            return;
+        }
+        root.color = BLACK;
+    }
+
+    private Node delete_recursively(Node node, Key key) {
+
+        if (key.compareTo(node.key) >= 0) {
+
+            if (isRed(node.left)) {
+                node = rotateRight(node);
+            }
+
+            if (key.compareTo(node.key) == 0 && (node.right == null)) {
+                return null;
+            }
+
+            if (!(isRed(node.right) || isRed(node.right.left))) {
+                node = moveRedRight(node);
+            }
+
+            if (key.compareTo(node.key) == 0) {
+                node.val = next_largest(node.right).val;
+                node.key = next_largest(node.right).key;
+                node.right = deleteMin(node.right);
+            } else {
+                node.right = delete_recursively(node.right, key);
+            }
+
+        } else {
+
+            if (!(isRed(node.left) || isRed(node.left.left))) {
+                node = moveRedLeft(node);
+            }
+            node.left = delete_recursively(node.left, key);
+        }
+        return balance(node);
+    }
+
+
+    private Node next_largest(Node node){
+        if (node.left == null){
+            return node;
+        } else {
+            return next_largest(node.left);
+        }
+    }
+
+
+    private Node deleteMin(Node node) {
+        if (node.left != null) {
+            if (!(isRed(node.left) || isRed(node.left.left))) {
+                node = moveRedLeft(node);
+            }
+            node.left = deleteMin(node.left);
+            return balance(node);
+        } else {
+            return null;
+        }
+    }
+
+
+    /*************************************************************************
+     *  Search FUnctions
+     *************************************************************************/
+
+    // value associated with the given key; null if no such key
+    public Value search(Key key) {
+        Node node = search_rec(root, key);
+        if (node == null) {
+            return null;
+        }
+        return node.val;
+    }
+
+    public Node search_rec(Node node, Key key) {
+        if (node == null) {
+            return null;
+        }
+
+        return node.key.compareTo(key) < 0 ? search_rec(node.right, key) : (node.key.compareTo(key) > 0 ? search_rec(node.left, key) : node);
+
+
+
+
+
+    }
+
+    // is there a key-value pair with the given key?
+    public boolean contains(Key key) {
+        return (search(key) != null);
+    }
+
+
+    /*************************************************************************
+     *  Utility functions
+     *************************************************************************/
+
+    // height of tree (1-node tree has height 0)
+    public int height() {
+        return height(root);
+    }
+
+    private int height(Node x) {
+        if (x == null) return -1;
+        return 1 + Math.max(height(x.left), height(x.right));
+    }
+
+    /*************************************************************************
+     *  Rank Methods
+     *************************************************************************/
+
+
+    // the key of rank k
+    public Key getValByRank(int k) {
+        Key out = getValByRank(root, k);
+        return out;
+    }
+
+    public Key getValByRank(Node node, int k) {
+        if (node == null) {
+            return null;
+        }
+
+        Node leftNode = node.left;
+
+        if (size(leftNode) >= k) {
+            if (size(leftNode) > k) {
+                return getValByRank(leftNode, k);
+            } else {
+                Key answer = node.key;
+                return answer;
+            }
+        } else {
+            Node rightNode = node.right;
+            return getValByRank(rightNode, k - size(leftNode) - 1);
+        }
+    }
+
+    // number of keys less than key
+    public int rank(Key key) {
+        return rankRecursive(root, key);
+    }
+
+    public int rankRecursive(Node node, Key key) {
+
+        if (node == null) {
+            return 0;
+        }
+
+
+        if (node.key.compareTo(key) < 0) {
+            return rankRecursive(node.right, key) + size(node) - size(node.right);
+        } else if (node.key.compareTo(key) > 0) {
+            return rankRecursive(node.left, key);
+        } else {
+            return size(node) - size(node.right) - 1;
+        }
+    }
+
+
+    /***********************************************************************
+     *  Range count and range search.
+     ***********************************************************************/
+
+    public List<Key> getElements(int a, int b) {
+        Key from = getValByRank(a);
+        Key to = getValByRank(b);
+        ArrayList<Key> nothing = new ArrayList<>();
+        if (from == null || to == null) {
+            return nothing;
+        }
+        ArrayList<Node> allnodes = new ArrayList<>();
+        treeToArrayList(root, allnodes);
+
+        ArrayList<Key> finallist = new ArrayList<>();
+        for (int i = a; i <= b; i++) {
+            finallist.add(allnodes.get(i).key);
+        }
+        return finallist;
+    }
+
+    public void treeToArrayList(RedBlackBST.Node node, ArrayList listofnodes) {
+
+        if (node == null) {
+            return;
+        }
+
+        treeToArrayList(node.left, listofnodes);
+        listofnodes.add(node);
+        treeToArrayList(node.right, listofnodes);
+    }
+
+
+    /*************************************************************************
+     *  red-black tree helper functions
+     *************************************************************************/
+
+    // make a left-leaning link lean to the right
+    private Node rotateRight(Node h) {
+        Node x = h.left;
+        h.left = x.right;
+        x.right = h;
+        x.color = x.right.color;
+        x.right.color = RED;
+        x.N = h.N;
+        h.N = size(h.left) + size(h.right) + 1;
+        return x;
+    }
+
+    // make a right-leaning link lean to the left
+    private Node rotateLeft(Node h) {
+        Node x = h.right;
+        h.right = x.left;
+        x.left = h;
+        x.color = x.left.color;
+        x.left.color = RED;
+        x.N = h.N;
+        h.N = size(h.left) + size(h.right) + 1;
+        return x;
+    }
+
+    // flip the colors of a node and its two children
+    private void flipColors(Node h) {
+        h.color = !h.color;
+        h.left.color = !h.left.color;
+        h.right.color = !h.right.color;
+    }
+
+    // Assuming that h is red and both h.left and h.left.left
+    // are black, make h.left or one of its children red.
+    private Node moveRedLeft(Node h) {
+        flipColors(h);
+        if (isRed(h.right.left)) {
+            h.right = rotateRight(h.right);
+            h = rotateLeft(h);
+        }
+        return h;
+    }
+
+    // Assuming that h is red and both h.right and h.right.left
+    // are black, make h.right or one of its children red.
+    private Node moveRedRight(Node h) {
+        flipColors(h);
+        if (isRed(h.left.left)) {
+            h = rotateRight(h);
+        }
+        return h;
+    }
+
+    // restore red-black tree invariant
+    private Node balance(Node h) {
+        //assert (h != null);
+
+        if (isRed(h.right)) h = rotateLeft(h);
+        if (isRed(h.left) && isRed(h.left.left)) h = rotateRight(h);
+        if (isRed(h.left) && isRed(h.right)) flipColors(h);
+
+        h.N = size(h.left) + size(h.right) + 1;
+        return h;
+    }
+
+
+    /*************************************************************************
+     *  The Main Function
+     Use this for testing
+     *************************************************************************/
+    public static void main(String[] args) {
+
+        Scanner readerTest = null;
+
+        try {
+            //Change File name to test other test files.
+            readerTest = new Scanner(new File(args[0]));
+        } catch (IOException e) {
+            System.out.println("Reading Oops");
+        }
+
+        RedBlackBST<Integer, Integer> test = new RedBlackBST<>();
+
+        while (readerTest.hasNextLine()) {
+            String line = readerTest.nextLine();
+            String[] input = line.split(" ");
+
+            for (String x : input) {
+                System.out.print(x + " ");
+            }
+
+            System.out.println();
+            switch (input[0]) {
+                case "insert":
+                    //System.out.println("TEST CASE---------------------" + line);
+                    Integer key = Integer.parseInt(input[1]);
+                    Integer val = Integer.parseInt(input[2]);
+                    test.insert(key, val);
+                    printTree(test.root);
+                    System.out.println();
+                    break;
+
+                case "delete":
+                    Integer key1 = Integer.parseInt(input[1]);
+                    test.delete(key1);
+                    printTree(test.root);
+                    System.out.println();
+                    break;
+
+                case "search":
+                    Integer key2 = Integer.parseInt(input[1]);
+                    Integer ans2 = test.search(key2);
+                    System.out.println(ans2);
+                    System.out.println();
+                    break;
+
+                case "getval":
+                    Integer key3 = Integer.parseInt(input[1]);
+                    Integer ans21 = test.getValByRank(key3);
+                    System.out.println(ans21);
+                    System.out.println();
+                    break;
+
+                case "rank":
+                    //System.out.println("TEST CASE---------------------" + line);
+                    Integer key4 = Integer.parseInt(input[1]);
+                    Object ans22 = test.rank(key4);
+                    System.out.println(ans22);
+                    System.out.println();
+                    break;
+
+                case "getelement":
+                    Integer low = Integer.parseInt(input[1]);
+                    Integer high = Integer.parseInt(input[2]);
+                    List<Integer> testList = test.getElements(low, high);
+
+                    for (Integer list : testList) {
+                        System.out.println(list);
+                    }
+
+                    break;
+
+                default:
+                    System.out.println("Error, Invalid test instruction! " + input[0]);
+            }
+        }
+
+    }
+
+
+    /*************************************************************************
+     *  Prints the tree
+     *************************************************************************/
+    public static void printTree(RedBlackBST.Node node) {
+
+        if (node == null) {
+            return;
+        }
+
+        printTree(node.left);
+        System.out.print(((node.color == true) ? "Color: Red; " : "Color: Black; ") + "Key: " + node.key + "\n");
+        printTree(node.right);
+    }
+}
