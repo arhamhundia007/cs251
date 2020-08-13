@@ -1,0 +1,121 @@
+-----------------------------------------------
+Start of Hash Table tests
+-----------------------------------------------
+Testing Class Structure....
+
+Testing Put....
+rPhone3: $748.47 Sold By: Ssamssung
+bPhone1: $861.27 Sold By: BlueBerry
+rPhone3: $748.47 Sold By: Ssamssung
+mPhone3: $776.07 Sold By: peach
+dPhone3: $768.03 Sold By: BlueBerry
+bPhone2: $862.98 Sold By: pineapple
+ePhone3: $751.83 Sold By: Ssamssung
+kPhone2: $883.56 Sold By: pineapple
+tPhone3: $713.25 Sold By: plum
+rPhone3: $748.47 Sold By: Ssamssung
+gPhone1: $698.67 Sold By: peach
+pPhone1: $909.9 Sold By: BlueBerry
+nPhone2: $808.34 Sold By: plum
+dPhone3: $768.03 Sold By: BlueBerry
+bPhone2: $862.98 Sold By: pineapple
+ePhone3: $751.83 Sold By: Ssamssung
+bPhone1: $861.27 Sold By: BlueBerry
+kPhone2: $883.56 Sold By: pineapple
+tPhone3: $713.25 Sold By: plum
+rPhone3: $748.47 Sold By: Ssamssung
+gPhone1: $698.67 Sold By: peach
+pPhone1: $909.9 Sold By: BlueBerry
+nPhone2: $808.34 Sold By: plum
+mPhone3: $776.07 Sold By: peach
+
+Testing Remove....
+dPhone3: $768.03 Sold By: BlueBerry
+bPhone2: $862.98 Sold By: pineapple
+ePhone3: $751.83 Sold By: Ssamssung
+kPhone2: $883.56 Sold By: pineapple
+gPhone1: $698.67 Sold By: peach
+pPhone1: $909.9 Sold By: BlueBerry
+nPhone2: $808.34 Sold By: plum
+ePhone3: $751.83 Sold By: Ssamssung
+kPhone2: $883.56 Sold By: pineapple
+gPhone1: $698.67 Sold By: peach
+pPhone1: $909.9 Sold By: BlueBerry
+nPhone2: $808.34 Sold By: plum
+dPhone3: $768.03 Sold By: BlueBerry
+bPhone2: $862.98 Sold By: pineapple
+ePhone3: $751.83 Sold By: Ssamssung
+kPhone2: $883.56 Sold By: pineapple
+tPhone3: $713.25 Sold By: plum
+gPhone1: $698.67 Sold By: peach
+pPhone1: $909.9 Sold By: BlueBerry
+nPhone2: $808.34 Sold By: plum
+
+Testing get....
+dPhone3: $768.03 Sold By: BlueBerry
+
+Testing Resize....
+Size before Resize: 20
+Size after Resize: 20
+
+Testing Collision....
+Collision at index 2: bPhone2, ePhone3
+
+
+Running testcase....
+rPhone3: $748.47 Sold By: Ssamssung
+bPhone1: $861.27 Sold By: BlueBerry
+rPhone3: $748.47 Sold By: Ssamssung
+mPhone3: $776.07 Sold By: peach
+dPhone3: $768.03 Sold By: BlueBerry
+bPhone2: $862.98 Sold By: pineapple
+ePhone3: $751.83 Sold By: Ssamssung
+kPhone2: $883.56 Sold By: pineapple
+tPhone3: $713.25 Sold By: plum
+gPhone1: $698.67 Sold By: peach
+pPhone1: $909.9 Sold By: BlueBerry
+nPhone2: $808.34 Sold By: plum
+dPhone3: $768.03 Sold By: BlueBerry
+bPhone2: $862.98 Sold By: pineapple
+ePhone3: $751.83 Sold By: Ssamssung
+kPhone2: $883.56 Sold By: pineapple
+tPhone3: $713.25 Sold By: plum
+rPhone3: $748.47 Sold By: Ssamssung
+gPhone1: $698.67 Sold By: peach
+pPhone1: $909.9 Sold By: BlueBerry
+nPhone2: $808.34 Sold By: plum
+dPhone3: $768.03 Sold By: BlueBerry
+bPhone2: $862.98 Sold By: pineapple
+ePhone3: $751.83 Sold By: Ssamssung
+bPhone1: $861.27 Sold By: BlueBerry
+kPhone2: $883.56 Sold By: pineapple
+tPhone3: $713.25 Sold By: plum
+rPhone3: $748.47 Sold By: Ssamssung
+gPhone1: $698.67 Sold By: peach
+pPhone1: $909.9 Sold By: BlueBerry
+nPhone2: $808.34 Sold By: plum
+mPhone3: $776.07 Sold By: peach
+dPhone3: $768.03 Sold By: BlueBerry
+bPhone2: $862.98 Sold By: pineapple
+ePhone3: $751.83 Sold By: Ssamssung
+kPhone2: $883.56 Sold By: pineapple
+gPhone1: $698.67 Sold By: peach
+pPhone1: $909.9 Sold By: BlueBerry
+nPhone2: $808.34 Sold By: plum
+ePhone3: $751.83 Sold By: Ssamssung
+kPhone2: $883.56 Sold By: pineapple
+gPhone1: $698.67 Sold By: peach
+pPhone1: $909.9 Sold By: BlueBerry
+nPhone2: $808.34 Sold By: plum
+dPhone3: $768.03 Sold By: BlueBerry
+bPhone2: $862.98 Sold By: pineapple
+ePhone3: $751.83 Sold By: Ssamssung
+kPhone2: $883.56 Sold By: pineapple
+tPhone3: $713.25 Sold By: plum
+gPhone1: $698.67 Sold By: peach
+pPhone1: $909.9 Sold By: BlueBerry
+nPhone2: $808.34 Sold By: plum
+Collision at index 2: bPhone2, ePhone3
+
+Size before Resize: 20
+Size after Resize: 20
